@@ -6,6 +6,13 @@ THIS IS A CHANGE
 ## dataset
 * contains Rubik's cube state and solve information. training#.txt contains a state and sequence of moves
 to get to a solved cube. trainingseq#.txt contains the state after each turn. 
+* dataset by Anton Bobrov 
+
+THE BEER-WARE LICENSE (Revision 42):
+antbob@users.noreply.github.com created this. As long as you retain
+this notice you can do whatever you want with this stuff. If we meet
+some day, and you think this stuff is worth it, you can buy me a beer in
+return Anton Bobrov
 
 ## __tests__
 * contains tests for functions. Ensure before uploading that you have both written your own test function, 
