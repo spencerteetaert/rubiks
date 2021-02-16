@@ -17,9 +17,9 @@ and your code successfully runs all other tests.
 ## tools 
 * Folder for the scripts used for testing/development.
 
-# main.py 
+## main.py 
 * main application for final app
-# run_tests.py
+## run_tests.py
 * runs all unit tests. RUN THIS BEFORE PUSHING TO ORIGIN, ENSURE IT WORKS
-# training.ipynb 
+## training.ipynb 
 * contains scripts used for training the model
