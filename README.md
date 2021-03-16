@@ -1,6 +1,8 @@
 # rubiks
 Project for APS360. Machine learning approach to solving the Rubik's Cube. 
 
+THIS IS A CHANGE
+
 ## dataset
 * contains Rubik's cube state and solve information. training#.txt contains a state and sequence of moves
 to get to a solved cube. trainingseq#.txt contains the state after each turn. 
