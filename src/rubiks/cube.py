@@ -17,7 +17,7 @@ class Cube:
                 the cube is "flattened" so that all faces are arranged horizontally from left to right (6 3 x 3 faces).
                 If not specified, cube is initialized in the solved state. 
 
-        optimal_path: string of N moves that lead to an optimal solve 
+        optimal_path: string or list of N moves that lead to an optimal solve 
         '''
         self.initialize_solved()
         if state is None:
@@ -25,8 +25,10 @@ class Cube:
         else:
             self.state = copy.copy(state)
         self.move_index = 0
-        self.optimal_path = optimal_path.split(" ")
-        
+        if type(optimal_path) == type(''):
+            self.optimal_path = optimal_path.split(" ")
+        elif type(optimal_path) == type([]):
+            self.optimal_path = optimal_path
     def __repr__(self):
         print("<cube object>\nCurrent state:")
         print(self.state)
