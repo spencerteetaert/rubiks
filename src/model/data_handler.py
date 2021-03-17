@@ -12,7 +12,7 @@ def parse_training(filename):
               color ordering of cubes is ["r", "o", "y", "w", "b", "g"] (yellow face on top, red to the left)
     
     returns: list of pairs (numpy array for cube_state, raw string of moves performed to solve)
-             cube state is a 3 x 18 x 6 numpy array using one-hot encoding (see make_state)
+             cube state is a 3 x 18 numpy array using one-hot encoding (see make_state)
     
     '''
     ret = []
@@ -46,9 +46,8 @@ def parse_trainingseq(filename):
 
     Returns:
         parsed_list: a list of tuples, each containing a pair of state and next move. The state is
-                     represented by a 3x18x6 numpy array, where the 3x18 is the flattened view of all
-                     blocks, and each block has a one hot encoding with dimension 6. The move is
-                     represented by a string.
+                     represented by a 3x18 numpy array, where the 3x18 is the flattened view of all
+                     blocks. The move is represented by a string.
     """
     parsed_list = []
     mapping = {"r":0, "o":1, "y":2, "w":3, "b": 4, "g": 5}
@@ -85,9 +84,8 @@ def make_state(cube):
     cube: a one-dimensional array of letters representing the colors on a rubiks cube
           face ordering is that of "parse_training" (see below), with each 9 consecutive letters representing a face
           
-    returns: 3 x 18 x 6 numpy array representing the cube state
+    returns: 3 x 18 numpy array representing the cube state
              the cube is "flattened" so that all faces are arranged horizontally from left to right (6 3 x 3 faces)
-             with the 3rd dimension being a one-hot encoding for the color (100000 = red, 010000 = orange, etc ...)
              
     '''
     mapping = {"r":0, "o":1, "y":2, "w":3, "b": 4, "g": 5}
