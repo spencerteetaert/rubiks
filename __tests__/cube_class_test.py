@@ -1,8 +1,3 @@
-'''
-Example test file. When you add new features, write a test file here to ensure
-that other people don't accidentally break it. Each feature should have its
-own test file for traceability purposes. 
-'''
 file_name = "cube_class_test"
 
 def run():
