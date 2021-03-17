@@ -11,7 +11,7 @@ possible_rotations_inverse = {'L':'L\'','R':'R\'','B':'B\'','F':'F\'','U':'U\'',
         'L2':'L2','R2':'R2','B2':'B2','F2':'F2','U2':'U2','D2':'D2'}
 
 class Cube:
-    def __init__(self, state=None, optimal_path=[]):
+    def __init__(self, state=None, optimal_path=''):
         '''
         state:  3 x 18 numpy array representing the cube state
                 the cube is "flattened" so that all faces are arranged horizontally from left to right (6 3 x 3 faces).
