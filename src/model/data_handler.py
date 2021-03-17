@@ -24,12 +24,14 @@ def make_state(cube):
 	         with the 3rd dimension being a one-hot encoding for the color (100000 = red, 010000 = orange, etc ...)
 	         
 	'''
+	mapping = {"r":0, "o":1, "y":2, "w":3, "b": 4, "g": 5}
+	# ident = np.eye(6)
 	assert len(cube) == 9*6
-	ret = np.empty([3, 18, 6])
+	ret = np.empty([3, 18])
 	for face in range(6):
 		for row in range(3):
 			for col in range(3):
-				ret[row,face*3+col] = one_hot(cube.pop(0))
+				ret[row,face*3+col] = mapping[cube.pop(0)] # ident[mapping[cube.pop(0)]]
 		
 	return ret
 
