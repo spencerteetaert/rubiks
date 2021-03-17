@@ -148,7 +148,7 @@ class Cube:
     def initialize_solved(self):
         temp = [i for i in range(6)] * 3
         temp.sort()
-        self.state_solved = np.array([temp, temp, temp], dtype=float)
+        self.state_solved = np.array([temp, temp, temp], dtype=int)
 
     def swap_inplace(self, indeces, clockwise=True, number=1):
         for i in range(number):
