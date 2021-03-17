@@ -33,9 +33,7 @@ class Cube:
         else:
             self.state = copy.copy(state)
     def __repr__(self):
-        print("<cube object>\nCurrent state:")
-        print(self.state)
-        print("Optimal path:\n" + self.optimal_path.__repr__())
+        display_console(self, letter=1)
         return ''
     
     def solved(self):

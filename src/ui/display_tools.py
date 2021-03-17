@@ -22,17 +22,17 @@ def display_console(cube, letter=0):
         for i in range(3):
             for j in range(18):
                 if cube[i][j] == 0:
-                    cubeLetter[i][j] = "L"
+                    cubeLetter[i][j] = "\033[91mL"
                 if cube[i][j] == 1:
-                    cubeLetter[i][j] = "U"
+                    cubeLetter[i][j] = "\033[93mU"
                 if cube[i][j] == 2:
-                    cubeLetter[i][j] = "F"
+                    cubeLetter[i][j] = "\033[92mF"
                 if cube[i][j] == 3:
-                    cubeLetter[i][j] = "D"
+                    cubeLetter[i][j] = "\033[97mD"
                 if cube[i][j] == 4:
-                    cubeLetter[i][j] = "R"
+                    cubeLetter[i][j] = "\033[95mR"
                 if cube[i][j] == 5:
-                    cubeLetter[i][j] = "B"
+                    cubeLetter[i][j] = "\033[94mB"
 
 
         print("       ", cubeLetter[0][3], cubeLetter[0][4], cubeLetter[0][5])
@@ -46,7 +46,7 @@ def display_console(cube, letter=0):
         print("       ", cubeLetter[0][9], cubeLetter[0][10], cubeLetter[0][11])
         print("       ", cubeLetter[1][9], cubeLetter[1][10], cubeLetter[1][11])
         print("       ", cubeLetter[2][9], cubeLetter[2][10], cubeLetter[2][11])
-        print("")
+        print("\033[97m")
 
 
 
