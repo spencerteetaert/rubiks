@@ -5,9 +5,6 @@ import copy
 import numpy as np
 from ..ui.display_tools import display_console
 
-#W, R, B, G, O, Y
-# color_ind = [0, 1, 2, 3, 4, 5]
-color_ind = [2, 1, 4, 5, 0, 3]
 possible_rotations = ['L','R','B','F','U','D','L\'','R\'','B\'','F\'','U\'','D\'','L2','R2','B2','F2','U2','D2']
 possible_rotations_inverse = {'L':'L\'','R':'R\'','B':'B\'','F':'F\'','U':'U\'','D':'D\'', \
     'L\'':'L','R\'':'R','B\'':'B','F\'':'F','U\'':'U','D\'':'D', \
@@ -19,12 +16,14 @@ class Cube:
         if state is None:
             self.state = copy.copy(self.state_solved)
         else:
-            self.state = state
+            self.state = copy.copy(state)
         self.move_index = 0
         self.optimal_path = optimal_path
         
     def __repr__(self):
-        return str(self.state)#display_console(self)
+        print(self.state)
+        return ''
+        # return self.state.__repr__()#display_console(self)
     
     def solved(self):
         '''
@@ -54,62 +53,62 @@ class Cube:
             self.optimal_path = [possible_rotations_inverse[rot]] + self.optimal_path
 
     def rotate(self, rotation):
-        print(rotation)
-        clockwise = False
+        clockwise = True
         number = 1
         if rotation[-1] == '\'':
             clockwise = False
         if rotation[-1] == '2':
             number = 2
+        # print("clockwise set to", clockwise)
 
-        if rotation[0] == 'L': # :,0:3
+        if rotation[0] == 'L': # :, == DONE
             # Rotate ed tiles
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
+            self.swap_inplace([[0, 3],[0, 6],[0, 9],[2, 17]], clockwise, number)
+            self.swap_inplace([[1, 3],[1, 6],[1, 9],[1, 17]], clockwise, number)
+            self.swap_inplace([[2, 3],[2, 6],[2, 9],[0, 17]], clockwise, number)
             # Rotate face tiles
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-        elif rotation[0] == 'R': # :,3:6
+            self.swap_inplace([[0, 1],[1, 2],[2, 1],[1, 0]], clockwise, number)
+            self.swap_inplace([[0, 0],[0, 2],[2, 2],[2, 0]], clockwise, number)
+        elif rotation[0] == 'R': # :,12:15 == DONE
             # Rotate ed tiles
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
+            self.swap_inplace([[0, 15],[2, 11],[2, 8],[2, 5]], clockwise, number)
+            self.swap_inplace([[1, 15],[1, 11],[1, 8],[1, 5]], clockwise, number)
+            self.swap_inplace([[2, 15],[0, 11],[0, 8],[0, 5]], clockwise, number)
             # Rotate face tiles
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-        elif rotation[0] == 'B': # :,12:15
+            self.swap_inplace([[1, 14],[2, 13],[1, 12],[0, 13]], clockwise, number)
+            self.swap_inplace([[0, 14],[2, 14],[2, 12],[0, 12]], clockwise, number)
+        elif rotation[0] == 'B': # :,15:18 == DONE
             # Rotate ed tiles
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
+            self.swap_inplace([[2, 14],[0, 5],[0, 0],[2, 9]], clockwise, number)
+            self.swap_inplace([[1, 14],[0, 4],[1, 0],[2, 10]], clockwise, number)
+            self.swap_inplace([[0, 14],[0, 3],[2, 0],[2, 11]], clockwise, number)
             # Rotate face tiles
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-        elif rotation[0] == 'F': # :,15:18
+            self.swap_inplace([[1, 17],[2, 16],[1, 15],[0, 16]], clockwise, number)
+            self.swap_inplace([[0, 17],[2, 17],[2, 15],[0, 15]], clockwise, number)
+        elif rotation[0] == 'F': # :,6:9 == DONE
             # Rotate ed tiles
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
+            self.swap_inplace([[0, 2],[2, 5],[2, 12],[0, 9]], clockwise, number)
+            self.swap_inplace([[1, 2],[2, 4],[1, 12],[0, 10]], clockwise, number)
+            self.swap_inplace([[2, 2],[2, 3],[0, 12],[0, 11]], clockwise, number)
             # Rotate face tiles
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-        elif rotation[0] == 'U': # :,6:9
+            self.swap_inplace([[1, 8],[2, 7],[1, 6],[0, 7]], clockwise, number)
+            self.swap_inplace([[0, 8],[2, 8],[2, 6],[0, 6]], clockwise, number)
+        elif rotation[0] == 'U': # :,3:6 === DONE
             # Rotate ed tiles
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
+            self.swap_inplace([[0, 15],[0, 12],[0, 6],[0, 0]], clockwise, number)
+            self.swap_inplace([[0, 16],[0, 13],[0, 7],[0, 1]], clockwise, number)
+            self.swap_inplace([[0, 17],[0, 14],[0, 8],[0, 2]], clockwise, number)
             # Rotate face tiles
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-        elif rotation[0] == 'D': # :,9:12
+            self.swap_inplace([[1, 5],[2, 4],[1, 3],[0, 4]], clockwise, number)
+            self.swap_inplace([[0, 5],[2, 5],[2, 3],[0, 3]], clockwise, number)
+        elif rotation[0] == 'D': # :,
             # Rotate ed tiles
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
+            self.swap_inplace([[2, 6],[2, 12],[2, 15],[2, 0]], clockwise, number)
+            self.swap_inplace([[2, 7],[2, 13],[2, 16],[2, 1]], clockwise, number)
+            self.swap_inplace([[2, 8],[2, 14],[2, 17],[2, 2]], clockwise, number)
             # Rotate face tiles
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
-            self.swap_inplace([[0, 0],[0, 0],[0, 0],[0, 0]], clockwise, number)
+            self.swap_inplace([[1, 11],[2, 10],[1, 9],[0, 10]], clockwise, number)
+            self.swap_inplace([[0, 11],[2, 11],[2, 9],[0, 9]], clockwise, number)
         
     def rotate_optimal(self):
         '''
@@ -127,34 +126,22 @@ class Cube:
         return self.state
 
     def initialize_solved(self):
-        F = [0, 0, 0, 0, 0, 0]
-        F[color_ind[3]] = 1
-        F_solved = np.tile(F, [3,3,1])
-        U = [0, 0, 0, 0, 0, 0]
-        U[color_ind[0]] = 1
-        U_solved = np.tile(U, [3,3,1])
-        L = [0, 0, 0, 0, 0, 0]
-        L[color_ind[4]] = 1
-        L_solved = np.tile(L, [3,3,1])
-        R = [0, 0, 0, 0, 0, 0]
-        R[color_ind[1]] = 1
-        R_solved = np.tile(R, [3,3,1])
-        B = [0, 0, 0, 0, 0, 0]
-        B[color_ind[2]] = 1
-        B_solved = np.tile(B, [3,3,1])
-        D = [0, 0, 0, 0, 0, 0]
-        D[color_ind[5]] = 1
-        D_solved = np.tile(D, [3,3,1])
-        self.state_solved = np.concatenate((L_solved, R_solved, U_solved, D_solved, B_solved, F_solved), axis=1)
+        temp = [i for i in range(6)] * 3
+        temp.sort()
+        self.state_solved = np.array([temp, temp, temp], dtype=float)
+
     def swap_inplace(self, indeces, clockwise=True, number=1):
-        for i in number:
+        for i in range(number):
             if clockwise:
                 temp = copy.copy(self.state[indeces[-1][0], indeces[-1][1]])
-                for i in range(1, len(indeces)):
+                for i in range(len(indeces) - 1, 0, -1):
                     self.state[indeces[i][0], indeces[i][1]] = self.state[indeces[i-1][0], indeces[i-1][1]]
                 self.state[indeces[0][0], indeces[0][1]] = temp
             else:
                 temp = copy.copy(self.state[indeces[0][0], indeces[0][1]])
-                for i in range(len(indeces) - 2, -1, -1):
+                # print("temp set to", temp)
+                for i in range(0, len(indeces)-1):
+                    # print("Swapping value {} to {}".format(self.state[indeces[i][0], indeces[i][1]], self.state[indeces[i+1][0], indeces[i+1][1]]))
                     self.state[indeces[i][0], indeces[i][1]] = self.state[indeces[i+1][0], indeces[i+1][1]]
                 self.state[indeces[-1][0], indeces[-1][1]] = temp
+                # print("ending set to", self.state[indeces[-1][0], indeces[-1][1]])
