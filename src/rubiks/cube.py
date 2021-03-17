@@ -51,11 +51,8 @@ class Cube:
         for i in range(0, num_moves):
             while True:
                 rot = np.random.choice(possible_rotations)
-                # print(rot, last_rotation)
                 if last_rotation != possible_rotations_inverse[rot]:
                     break
-                else:
-                    print("INVERTED MOVE", rot, last_rotation)
             last_rotation = rot
             self.rotate(rot)
             self.optimal_path = [possible_rotations_inverse[rot]] + self.optimal_path

@@ -7,11 +7,13 @@ file_name = "example_test"
 
 def run():
     # Test code goes here 
-    return True
+    # return boolean (true if passed, false if not) and error message if applicable 
+    return True, ""
 
 if __name__=="__tests__."+file_name:
     print("Testing {}.py...".format(file_name))
-    if run():
-        print("{}.py successful.".format(file_name))
+    ret, msg = run()
+    if ret:
+        print("{}.py successful.\n".format(file_name))
     else:
-        print("ERR: {}.py failed.".format(file_name))
+        print("ERR: {}.py failed.\n{}".format(file_name, msg))
