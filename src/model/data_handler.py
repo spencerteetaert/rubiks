@@ -51,7 +51,6 @@ def parse_trainingseq(filename):
     """
     parsed_list = []
     mapping = {"r":0, "o":1, "y":2, "w":3, "b": 4, "g": 5}
-    TEMPCOUNTER = 0
     with open(filename, 'r') as file:
         while True:
             state = file.readline().split()
@@ -71,9 +70,6 @@ def parse_trainingseq(filename):
                     state_array[2, (i // 9) * 3 + (i % 9 - 6)] = int(state[i])
 
             parsed_list.append((state_array, move))
-            TEMPCOUNTER += 1
-            if TEMPCOUNTER == 1000:
-                break
 
     return parsed_list
 
