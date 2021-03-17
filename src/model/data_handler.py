@@ -2,17 +2,46 @@
 File for data handling functions. Read/write/conversions
 '''
 import numpy as np
-import sys
 
-def one_hot(color):
-	'''
-	color: a single chacter that is in "roywbg"
-	
-	returns: 1 x 6 numpy array that encodes the color depending on its position in the string above
-	'''
-	COLOR_ORDER = "roywbg" # see parse_training
-	assert color in COLOR_ORDER
-	return np.array([int(c == color) for c in COLOR_ORDER])
+def parse_file(filename):
+    """ Return a list representing the parsed states and moves in the filename
+
+    Args:
+        filename: a string representing the path of the target file, with file naming
+                  convention "trainingseq<dataset number>.txt"
+
+                  The file contains alternative lines of current states and next moves,
+                  with the cube side sequence of ["L", "U", "F", "D", "R", "B"] for the states
+
+    Returns:
+        parsed_list: a list of tuples, each containing a pair of state and next move. The state is
+                     represented by a 3x18x6 numpy array, where the 3x18 is the flattened view of all
+                     blocks, and each block has a one hot encoding with dimension 6. The move is
+                     represented by a string.
+    """
+    parsed_list = []
+    with open(filename, 'r') as file:
+        while True:
+            state = file.readline().split()
+            move = file.readline().strip()
+            if not move:
+                break
+
+            assert len(state) == 3 * 18
+            state_array = np.empty([3, 18, 6])
+            for i in range(len(state)):
+                if (i % 9) in range(3):
+                    state_array[0, (i // 9) * 3 + (i % 9)] = num_one_hot(int(state[i]))
+                if (i % 9) in range(3, 6):
+                    state_array[1, (i // 9) * 3 + (i % 9 - 3)] = num_one_hot(int(state[i]))
+                if (i % 9) in range(6, 9):
+                    state_array[2, (i // 9) * 3 + (i % 9 - 6)] = num_one_hot(int(state[i]))
+
+            parsed_list.append((state_array, move))
+
+    return parsed_list
+
+import sys
 
 def make_state(cube):
 	'''
@@ -27,7 +56,8 @@ def make_state(cube):
 	mapping = {"r":0, "o":1, "y":2, "w":3, "b": 4, "g": 5}
 	# ident = np.eye(6)
 	assert len(cube) == 9*6
-	ret = np.empty([3, 18])
+  	COLOR_ORDER = "roywbg" # see parse_training
+	ret = np.empty([3, 18, 6])
 	for face in range(6):
 		for row in range(3):
 			for col in range(3):
