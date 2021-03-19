@@ -1,4 +1,5 @@
-file_name = "cube_class_test"
+import os
+file_name = os.path.basename(__file__)[:-3]
 
 def run():
     # Test code goes here 
