@@ -11,7 +11,7 @@ possible_rotations_inverse = {'L':'L\'','R':'R\'','B':'B\'','F':'F\'','U':'U\'',
         'L2':'L2','R2':'R2','B2':'B2','F2':'F2','U2':'U2','D2':'D2'}
 
 class Cube:
-    def __init__(self, state=None, optimal_path=''):
+    def __init__(self, state=None, optimal_path='', data_generation=False):
         '''
         state:  3 x 18 numpy array representing the cube state
                 the cube is "flattened" so that all faces are arranged horizontally from left to right (6 3 x 3 faces).
@@ -20,19 +20,23 @@ class Cube:
         optimal_path: string of N moves that lead to an optimal solve
 
         initial state:
+        optimal_path: string or list of N moves that lead to an optimal solve 
         '''
-        self.initialize_solved()
-        if state is None:
-            self.state = copy.copy(self.state_solved)
+        if not data_generation:
+            self.initialize_solved()
+            if state is None:
+                self.state = copy.copy(self.state_solved)
+            else:
+                self.state = copy.copy(state)
+            self.move_index = 0
+            if type(optimal_path) == type(''):
+                self.optimal_path = optimal_path.split(" ")
+            elif type(optimal_path) == type([]):
+                self.optimal_path = optimal_path
         else:
             self.state = copy.copy(state)
-        self.move_index = 0
-        self.optimal_path = optimal_path.split(" ")
-        
     def __repr__(self):
-        print("<cube object>\nCurrent state:")
-        print(self.state)
-        print("Optimal path:\n" + self.optimal_path.__repr__())
+        display_console(self, letter=1)
         return ''
     
     def solved(self):
