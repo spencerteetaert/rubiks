@@ -34,7 +34,6 @@ def display_console(cube, letter=0):
                 if cube[i][j] == 5:
                     cubeLetter[i][j] = "B"
 
-
         print("       ", cubeLetter[0][3], cubeLetter[0][4], cubeLetter[0][5])
         print("       ", cubeLetter[1][3], cubeLetter[1][4], cubeLetter[1][5])
         print("       ", cubeLetter[2][3], cubeLetter[2][4], cubeLetter[2][5])
@@ -47,7 +46,6 @@ def display_console(cube, letter=0):
         print("       ", cubeLetter[1][9], cubeLetter[1][10], cubeLetter[1][11])
         print("       ", cubeLetter[2][9], cubeLetter[2][10], cubeLetter[2][11])
         print("")
-
 
 
 def display_3d(cube):
