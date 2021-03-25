@@ -1,14 +1,22 @@
+import copy
+from ..rubiks.cube import Cube
+from model import RubiksModel
 
 class Node:
 	
-	def __init__(self, moves_til_finish, cube_state):
+	def __init__(self, cube, model):
 		"""
+		
+		cube: a Cube object defined in cube.py (Holds numpy state that is useful to our model)
+		model: a RubiksModel object, used for ranking how close this cube is to being solved
+		
 		Later things to add:
 			- a pointer to his parent node, use to reconstruct the path of moves taken
 			
 		"""
-		self.moves = moves_til_finish
-		self.cube_state = cube_state
+		self.moves = model(cube.state) # the number of moves until the cube is solved
+		self.model = model
+		self.cube = copy.copy(cube)
 	
 	def __eq__(self, other):
 		""""
@@ -26,18 +34,23 @@ class Node:
 		"""
 		from a given state, generate and return all possible next states from here
 		returns a list of "Node" objects to be processed by "SearchEngine"
-		
-		TODO: work with the model to generate and rank next states
 		"""
 		
-		return []
+		neighbours = []
+		for direction in {"L", "R", "U", "D", "B", "F"}:
+			for modifier in {"", "'", "2"}:
+				cube_copy = copy.copy(self.cube)
+				cube_copy.rotate(direction + modifier)
+				neighbours.append( Node(cube_copy, self.model) )
+		
+		return neighbours
 
 # potential searching algorithms named here
 BEST_FIRST = "BEST_FIRST"
 
 class SearchEngine:
 	
-	def __init__(self):
+	def __init__(self, model):
 		
 		self.set_algo(BEST_FIRST)
 	
