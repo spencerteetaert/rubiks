@@ -1,6 +1,7 @@
 .vscode/
 tempCodeRunnerFile.py
 spencer_dev.py
+ignore/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

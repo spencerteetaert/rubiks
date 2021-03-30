@@ -2,6 +2,7 @@
 File for data handling functions. Read/write/conversions
 '''
 from datetime import datetime
+import tqdm
 import random
 import copy
 import numpy as np
@@ -111,8 +112,11 @@ def generate_data(path, b=2, d=20):
     states = []
     heuristics = []
     print("Generating data. This may take a while.")
-    cube = Cube() # Start with a solved cube
-    _generate_data(states, heuristics, cube, b, d-1, d)
+    for i in tqdm.tqdm(range(d)):
+        for j in range(max(1, 2**(i-1))):
+            cube = Cube() # Start with a solved cube
+            _generate_data(states, heuristics, cube, b, d-i-1, d-i)
+
     states = torch.tensor(states)
     heuristics = torch.tensor(heuristics)
     print("Data generated.\n\tstate shape: {}\n\theuristics shape: {}".format(states.shape, heuristics.shape))
