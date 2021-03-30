@@ -10,8 +10,8 @@ from ..rubiks.cube import Cube
 
 def parse_training(filename):
     '''
-    filename: a string for imput data file, in the form of "training<dataset number>.txt"
-              for now, filename must be an abosolute path for the file
+    filename: a string for input data file, in the form of "training<dataset number>.txt"
+              for now, filename must be an absolute path for the file
     
               face ordering of cubes is  ["L", "R", "U", "D", "B", "F"] 
               color ordering of cubes is ["r", "o", "y", "w", "b", "g"] (yellow face on top, red to the left)
@@ -29,7 +29,6 @@ def parse_training(filename):
             if not moves: break # EOF
             
             # print(' '.join(cube[i+4] for i in range(0, 9*6, 9))) # prints the colors on the faces [r, o, y, w, b, g]
-            
             ret.append( (make_state(cube), moves) )
             
         print("all good {}".format(filename))

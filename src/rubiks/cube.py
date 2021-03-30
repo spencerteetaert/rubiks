@@ -168,3 +168,10 @@ class Cube:
                 for i in range(0, len(indeces)-1):
                     self.state[indeces[i][0], indeces[i][1]] = self.state[indeces[i+1][0], indeces[i+1][1]]
                 self.state[indeces[-1][0], indeces[-1][1]] = temp
+
+    def stepZero(self):
+        if self.state[0][3] == 1 or self.state[0][5] == 1 or self.state[2][3] == 1 or self.state[2][5] == 1:
+            print("here")
+        return
+
+
