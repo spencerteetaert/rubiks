@@ -18,9 +18,12 @@ def train(model, num_epochs=30, learning_rate=0.001, batch_size=32, train_on=100
     '''
     # get the training and validation sets
     if data_path == "":
-        train_set, valid_set = gen_dataset(train_on, batch_size), gen_dataset(valid_on, batch_size)
+        train_set, valid_set = generate_dataset(train_on, batch_size), generate_dataset(valid_on, batch_size)
     else:
-        train_set, valid_set = load_dataset(data_path), load_dataset(data_path)
+        train_set, valid_set = load_datasets(data_path)
+
+    train_loader = torch.utils.data.DataLoader(train_set, batch_size, shuffle=True)
+    valid_loader = torch.utils.data.DataLoader(valid_set, batch_size, shuffle=True)
 
     criterion = nn.L1Loss()
     optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=0.9)
@@ -35,7 +38,7 @@ def train(model, num_epochs=30, learning_rate=0.001, batch_size=32, train_on=100
         total_train_loss = 0.0
         total_train_acc = 0.0
         total_data = 0
-        for i, data in enumerate(train_set, 0):
+        for i, data in enumerate(train_loader, 0):
             # Get the inputs
             inputs, labels = data
             labels = labels.unsqueeze(1)
@@ -55,7 +58,7 @@ def train(model, num_epochs=30, learning_rate=0.001, batch_size=32, train_on=100
         # write data of each epoch to the arrays
         train_acc[epoch] = float(total_train_acc) / total_data
         train_loss[epoch] = float(total_train_loss) / (i + 1)
-        valid_acc[epoch], valid_loss[epoch] = evaluate(model, valid_set, criterion)
+        valid_acc[epoch], valid_loss[epoch] = evaluate(model, valid_loader, criterion)
         # print the data
         print(("Epoch {}: Train accuracy: {}, Train loss: {} |" +
                "Validation accuracy: {}, Validation loss: {}").format(
