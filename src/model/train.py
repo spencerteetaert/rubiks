@@ -3,7 +3,7 @@ from random import shuffle
 import numpy as np
 import torch.nn as nn
 import torch.optim as optim
-from .data_handler import gen_dataset, load_dataset
+from .data_handler import generate_dataset, load_datasets
 from ..rubiks.cube import Cube
 
 def train(model, num_epochs=30, learning_rate=0.001, batch_size=32, train_on=10000, valid_on=2000, data_path=""):
@@ -18,7 +18,7 @@ def train(model, num_epochs=30, learning_rate=0.001, batch_size=32, train_on=100
     '''
     # get the training and validation sets
     if data_path == "":
-        train_set, valid_set = generate_dataset(train_on, batch_size), generate_dataset(valid_on, batch_size)
+        train_set, valid_set = generate_dataset(train_on), generate_dataset(valid_on)
     else:
         train_set, valid_set = load_datasets(data_path)
 

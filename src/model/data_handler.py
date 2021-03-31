@@ -111,6 +111,7 @@ def generate_dataset(num_data):
     Returns:
         dataset: torch.utils.data.TensorDataset object containing num_data samples.
     '''
+    s = time.time()
     lower_n = 5  # to be set later
     every_n = num_data // (21 - lower_n)
     data = []
@@ -125,12 +126,13 @@ def generate_dataset(num_data):
     data = torch.tensor(data)
     labels = torch.tensor(labels)
     dataset = torch.utils.data.TensorDataset(data.long(), labels)
+    print("{} sample dataset generated in {:.2}s".format(num_data, time.time() - s))
 
     return dataset
 
-def save_datasets(filepath, num_train, num_valid)
-    training_set = generate_data(num_train)
-    valid_set = generate_data(num_valid)
+def save_datasets(filepath, num_train, num_valid):
+    training_set = generate_dataset(num_train)
+    valid_set = generate_dataset(num_valid)
 
     print("Exporting data...")
     now = datetime.now()
@@ -138,11 +140,13 @@ def save_datasets(filepath, num_train, num_valid)
     data_name = filepath + "generated_dataset_" + curr_time
     torch.save((training_set, valid_set), data_name)
     print("Data exported.")
+    return data_name
 
 def load_datasets(filepath):
     s = time.time()
     (training_set, valid_set) = torch.load(filepath)
     print("Datasets loaded in {:.2}s".format(time.time() - s))
+    print("  Training size: {}\n  Validation size: {}".format(len(training_set), len(valid_set)))
     return training_set, valid_set
 
 
