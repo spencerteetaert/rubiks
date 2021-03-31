@@ -17,6 +17,10 @@ class Node:
 		self.moves = model(cube.state) # the number of moves until the cube is solved
 		self.model = model
 		self.cube = copy.copy(cube)
+		self.parent = None
+	
+	def set_parent(self, parent):
+		self.parent = parent
 	
 	def __eq__(self, other):
 		""""
@@ -71,6 +75,10 @@ class SearchEngine:
 		
 		Prints some error message if a path is not found
 		
+		returns:
+				- A path of Node objects representing the sequence of moves performed to solve the cube
+				- returns None if our model was not able to solve the cube in under 'MAX_MOVES' steps
+		
 		"""
 		
 		# Define the maximum number of moves allowed when searching
@@ -92,15 +100,21 @@ class SearchEngine:
 			ptr += 1
 			
 			if cur_node == finish_node:
-				print("Successfully solved the cube in {} moves :)".format(distance[cur_node]))
 				# do some more printing / generate path of moves here
-				return
+				print("Successfully solved the cube in {} moves :)".format(distance[cur_node]))
+				moves = []
+				
+				while cur_node is not None:
+					moves.append(cur_node)
+					cur_node = cur_node.parent
+				
+				moves.reverse()
+				return moves
 			
 			if distance[cur_node] == MAX_MOVES:
 				# we cannot extend this state any more
 				continue
 
-			
 			next_states = cur_node.get_next_states()
 			
 			# right now, default and only algorithm is best-first, 
@@ -111,10 +125,12 @@ class SearchEngine:
 				next_node_dist = distance[next_node] if next_node in distance else float('inf')
 				if distance[cur_node] + 1 < next_node_dist:
 					distance[next_node] = distance[cur_node] + 1
+					next_node.set_parent(cur_node) # for retracing the path of moves performed
 					queue.append(next_node)
 			
 		
 		print("Unable to solve cube in {} moves :(".format(MAX_MOVES))
 		# maybe add some printing here to see what the starting state was / throw an error
 		
+		return None
 	
