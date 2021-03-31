@@ -4,6 +4,7 @@ PyTorch model file
 import torch.nn as nn
 import torch
 import torch.nn.functional as F
+torch.manual_seed(0)
 import numpy
 
 class RubiksModel(nn.Module):
@@ -19,7 +20,7 @@ class RubiksModel(nn.Module):
         self.fcs = []
         for i in range(len(internal_dimensions)-1):
             self.fcs += [nn.Linear(internal_dimensions[i], internal_dimensions[i+1])]
-        self.fc2 = nn.Linear(internal_dimensions[-1], 21)
+        self.fc2 = nn.Linear(internal_dimensions[-1], 1)
 
     def forward(self, x):
         # Input: Nx3x18x6 one hot encoded rubiks cube state data
