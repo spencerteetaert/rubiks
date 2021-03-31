@@ -13,6 +13,7 @@ class RubiksModel(nn.Module):
         self.activation = activation
         self.internal_dimensions = internal_dimensions
         self.dropout_rate = dropout_rate
+        self.ident = torch.eye(6)
 
         self.fc1 = nn.Linear(3*18*6, internal_dimensions[0])
         self.fcs = []
@@ -22,7 +23,8 @@ class RubiksModel(nn.Module):
 
     def forward(self, x):
         # Input: Nx3x18x6 one hot encoded rubiks cube state data
-        x = x.view(-1, 3*18*6)
+        x = self.ident[x].view(-1, 3*18*6)
+        # x = x.view(-1, 3*18).float()
         x = self.activation(self.fc1(x))
         for i in range(len(self.internal_dimensions)-1):
             x = F.dropout(self.activation(self.fcs[i](x)), self.dropout_rate)

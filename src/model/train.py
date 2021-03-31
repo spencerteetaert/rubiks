@@ -3,8 +3,9 @@ from random import shuffle
 import numpy as np
 import torch.nn as nn
 import torch.optim as optim
+from ..rubiks.cube import Cube
 
-def train(model, num_epochs=3, learning_rate=0.001, batch_size=32, train_on=10000, valid_on=2000):
+def train(model, num_epochs=30, learning_rate=0.001, batch_size=32, train_on=10000, valid_on=2000):
     ''' Train the model inplace
     Args:
         model: the model to train on
@@ -36,7 +37,7 @@ def train(model, num_epochs=3, learning_rate=0.001, batch_size=32, train_on=1000
             # Zero the parameter gradients
             optimizer.zero_grad()
             # Forward pass, backward pass, and optimize
-            outputs = model(inputs.float())
+            outputs = model(inputs)
             loss = criterion(outputs, labels.long())
             loss.backward()
             optimizer.step()
@@ -58,6 +59,8 @@ def train(model, num_epochs=3, learning_rate=0.001, batch_size=32, train_on=1000
             train_loss[epoch],
             valid_acc[epoch],
             valid_loss[epoch]))
+
+    return train_acc, train_loss, valid_acc, valid_loss
 
 
 def get_datset(num_data, batch_size):
@@ -98,7 +101,7 @@ def get_datset(num_data, batch_size):
             batch_array[i-index] = dataset[i][0]
             batch_label[i-index] = dataset[i][1]
         index += batch_size
-        batched_set.append((torch.from_numpy(batch_array), torch.from_numpy(batch_label)))
+        batched_set.append((torch.from_numpy(batch_array).long(), torch.from_numpy(batch_label).long()))
     return batched_set
 
 def evaluate(model, dataset, criterion):
@@ -116,7 +119,7 @@ def evaluate(model, dataset, criterion):
     total_data = 0
     for i, data in enumerate(dataset, 0):
         inputs, labels = data
-        outputs = model(inputs.float())
+        outputs = model(inputs)
         loss = criterion(outputs, labels.long())
         pred = outputs.max(1, keepdim=True)[1]
         total_corr += pred.eq(labels.view_as(pred)).sum().item()
