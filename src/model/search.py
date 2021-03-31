@@ -1,6 +1,6 @@
 import copy
 from ..rubiks.cube import Cube
-from model import RubiksModel
+from .model import RubiksModel
 
 class Node:
 	
@@ -133,4 +133,3 @@ class SearchEngine:
 		# maybe add some printing here to see what the starting state was / throw an error
 		
 		return None
-	

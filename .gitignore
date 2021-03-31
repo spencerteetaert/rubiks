@@ -3,6 +3,8 @@ tempCodeRunnerFile.py
 spencer_dev.py
 ignore/
 
+/tools/pro.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
