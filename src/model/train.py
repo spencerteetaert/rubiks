@@ -46,7 +46,7 @@ def train(model, num_epochs=30, learning_rate=0.001, batch_size=32, train_on=100
     if savepath != "":
         now = datetime.now()
         curr_time = now.strftime("%d%m%Y_%H%M%S")
-        savepath += curr_time
+        savepath += "{}_{}".format(model.name, curr_time)
         os.mkdir(savepath)
         savepath += "/"
         create_readme(model, num_epochs, batch_size, len(train_set), len(valid_set), criterion, optimizer, savepath)
