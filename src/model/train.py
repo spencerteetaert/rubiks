@@ -7,7 +7,7 @@ import torch.optim as optim
 from .data_handler import generate_dataset, load_datasets
 from ..rubiks.cube import Cube
 
-def train(model, num_epochs=30, learning_rate=0.001, batch_size=32, train_on=10000, valid_on=2000, data_path="", savepath="", gpu=True):
+def train(model, num_epochs=30, learning_rate=0.001, batch_size=32, train_on=10000, momentum=0.9, valid_on=2000, data_path="", savepath="", gpu=True):
     ''' Train the model inplace
     Args:
         model: the model to train on
@@ -17,6 +17,7 @@ def train(model, num_epochs=30, learning_rate=0.001, batch_size=32, train_on=100
         train_on: the number of data to train on, which will be generated with the function gen_dataset
         valid_on: the number of data to validate on, which will be generated with the function gen_dataset
     '''
+
     # get the training and validation sets
     if data_path == "":
         train_set, valid_set = generate_dataset(train_on), generate_dataset(valid_on)
@@ -33,12 +34,15 @@ def train(model, num_epochs=30, learning_rate=0.001, batch_size=32, train_on=100
     model.to(device) # Puts model on training hardware
 
     criterion = nn.L1Loss()
-    optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=0.9)
+    optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=momentum)
     # create arrays to store training data
     train_acc = np.zeros(num_epochs)
     train_loss = np.zeros(num_epochs)
     valid_acc = np.zeros(num_epochs)
     valid_loss = np.zeros(num_epochs)
+
+    if savepath != "":
+        create_readme(model, num_epochs, batch_size, len(train_set), len(valid_set), criterion, optimizer, savepath)
 
     for epoch in range(num_epochs):
         s = time.time()
@@ -118,3 +122,28 @@ def evaluate(model, dataset, criterion, gpu=True):
     acc = float(total_corr) / total_data
     loss = float(total_loss) / (i + 1)
     return acc, loss
+
+def create_readme(model, num_epochs, batch_size, train_set_length, valid_set_length, criterion, optimizer, savepath):
+    b = "-------------------------\n"
+    filename = savepath + "README.txt"
+
+    text = "Training Data Information\n\n"
+    text += "Training size: {:,}\n".format(train_set_length)
+    text += "Validation size: {:,}\n".format(valid_set_length)
+    text += b
+
+    text += "Model Parameters\n\n"
+    text += model.__repr__() + "\n"
+    text += b
+
+    text += "Training Parameters\n\n"
+    text += "Batch size: {}\n".format(batch_size)
+    text += "Nominal epochs: {}\n".format(num_epochs)
+    text += "Loss function: {}\n".format(criterion)
+    text += "Optimizer: {}\n".format(optimizer)
+    device = torch.cuda.get_device_name(model.ident.get_device())
+    text += "Device trained on: {}\n".format(device)
+
+    f = open(filename, "w")
+    f.write(text)
+    f.close()
