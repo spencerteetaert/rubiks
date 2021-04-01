@@ -1,5 +1,7 @@
 import torch
 import time
+from datetime import datetime
+import os
 from random import shuffle
 import numpy as np
 import torch.nn as nn
@@ -30,8 +32,8 @@ def train(model, num_epochs=30, learning_rate=0.001, batch_size=32, train_on=100
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     if not gpu:
         device = torch.device('cpu')
-    print("Training on device: {}".format(device))
     model.to(device) # Puts model on training hardware
+    print("Training on device: {}".format(torch.cuda.get_device_name(model.ident.get_device())))
 
     criterion = nn.L1Loss()
     optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=momentum)
@@ -42,6 +44,11 @@ def train(model, num_epochs=30, learning_rate=0.001, batch_size=32, train_on=100
     valid_loss = np.zeros(num_epochs)
 
     if savepath != "":
+        now = datetime.now()
+        curr_time = now.strftime("%d%m%Y_%H%M%S")
+        savepath += curr_time
+        os.mkdir(savepath)
+        savepath += "/"
         create_readme(model, num_epochs, batch_size, len(train_set), len(valid_set), criterion, optimizer, savepath)
 
     for epoch in range(num_epochs):
@@ -76,7 +83,7 @@ def train(model, num_epochs=30, learning_rate=0.001, batch_size=32, train_on=100
         train_loss[epoch] = float(total_train_loss) / (i + 1)
         valid_acc[epoch], valid_loss[epoch] = evaluate(model, valid_loader, criterion, gpu=gpu)
         # print the data
-        print(("Epoch {}: Train accuracy: {}, Train loss: {} |" +
+        print(("Epoch {}: Train accuracy: {}, Train loss: {} | " +
                "Validation accuracy: {}, Validation loss: {} | Time: {}").format(
             epoch + 1,
             train_acc[epoch],
