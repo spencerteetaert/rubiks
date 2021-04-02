@@ -34,4 +34,4 @@ class RubiksModel(nn.Module):
     def forward(self, x):
         # Input: Nx3x18x6 one hot encoded rubiks cube state data
         x = self.ident[x].view(-1, 3*18*6)
-        return self.sequential(x)
+        return torch.clamp(self.sequential(x), 4.51, 20.49)
