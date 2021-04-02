@@ -72,9 +72,12 @@ BEST_FIRST = "BEST_FIRST"
 
 class SearchEngine:
 	
+	close_nodes = {}
+	
 	def __init__(self, model):
 		
 		self.set_algo(BEST_FIRST)
+		self.model = model
 	
 	def set_algo(self, algo_name):
 		"""
@@ -84,6 +87,29 @@ class SearchEngine:
 		algo_name must be in { BEST_FIRST } (add more when needed)
 		"""
 		
+	def backtrack(self, node, depth):
+		
+		if depth == 0:
+			return
+		
+		neighbours = node.get_next_states()
+		for next_node in neighbours:
+			next_node.set_parent(node)
+			if next_node not in SearchEngine.close_nodes:
+				SearchEngine.close_nodes[next_node] = node
+				self.backtrack(next_node, depth-1)
+	
+	def get_close_nodes(self):
+		"""
+		Generate close_nodes dictionary
+		
+		Key: Node object
+		Value: Next Node object on the path to being solved 
+		"""
+
+		SEARCH_DEPTH = 5
+		self.backtrack( Node(Cube(), self.model), SEARCH_DEPTH)
+
 	def search(self, starting_node, finish_node):
 		"""
 		perform the searching algoritm to solve the cube
@@ -116,14 +142,18 @@ class SearchEngine:
 		distance[starting_node] = 0
 		
 		start_time = time.time()
-		dd = -1
 		while queue and time.time() - start_time < MAX_TIME:
 
 			cur_node = heappop(queue)
 			# cur_node = queue.pop(0)
-			if distance[cur_node] > dd:
-				dd = distance[cur_node]
-				print("Current Search depth: {}".format(dd))
+			
+			if cur_node in SearchEngine.close_nodes:
+				print("HERE")
+				while cur_node != finish_node:
+					next_node = Node( Cube(state=SearchEngine.close_nodes[cur_node].cube.state), self.model)
+					next_node.set_parent(cur_node)
+					distance[next_node] = distance[cur_node] + 1
+					cur_node = next_node
 			
 			if cur_node == finish_node:
 				# do some more printing / generate path of moves here
@@ -156,8 +186,8 @@ class SearchEngine:
 				next_node_dist = distance[next_node] if next_node in distance else float('inf')
 				if distance[cur_node] + 1 < next_node_dist:
 					distance[next_node] = distance[cur_node] + 1
-					# next_node.moves += 0.6 * cur_node.moves
-					next_node.moves += 0.5 * distance[next_node]
+					# next_node.moves += 0.2 * cur_node.moves
+					next_node.moves += 0.2 * distance[next_node]
 					next_node.set_parent(cur_node) # for retracing the path of moves performed
 					heappush(queue, next_node)
 					# queue.append(next_node)
