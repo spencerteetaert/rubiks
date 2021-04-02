@@ -92,13 +92,19 @@ class SearchEngine:
 		if depth == 0:
 			return
 		
-		neighbours = node.get_next_states()
-		for next_node in neighbours:
-			next_node.set_parent(node)
-			if next_node not in SearchEngine.close_nodes:
-				SearchEngine.close_nodes[next_node] = node
-				self.backtrack(next_node, depth-1)
-	
+		queue = [(node, depth)]
+		
+		while queue:
+			node, d = queue.pop(0)
+			
+			if d > 0:		
+				neighbours = node.get_next_states()
+				for next_node in neighbours:
+					next_node.set_parent(node)
+					if next_node not in SearchEngine.close_nodes:
+						SearchEngine.close_nodes[next_node] = node
+						queue.append((next_node, d-1))
+		
 	def get_close_nodes(self):
 		"""
 		Generate close_nodes dictionary
@@ -107,7 +113,7 @@ class SearchEngine:
 		Value: Next Node object on the path to being solved 
 		"""
 
-		SEARCH_DEPTH = 5
+		SEARCH_DEPTH = 3
 		self.backtrack( Node(Cube(), self.model), SEARCH_DEPTH)
 
 	def search(self, starting_node, finish_node):
@@ -128,14 +134,14 @@ class SearchEngine:
 		# Define the maximum number of moves allowed when searching
 		# This is a performance benchmark that our model must beat
 		MAX_MOVES = 20
-		MAX_TIME = 10
+		MAX_TIME = 5
 		
 		# define a queue of possible states to explore
 		# most searching algorithms use some sort of queue to explore states
 		queue = []
-		# queue.append(starting_node)
-		heapify(queue)
-		heappush(queue, starting_node)
+		queue.append(starting_node)
+		# heapify(queue)
+		# heappush(queue, starting_node)
 		
 		# map of state -> number of moves needed to get here
 		distance = {} 
@@ -144,8 +150,8 @@ class SearchEngine:
 		start_time = time.time()
 		while queue and time.time() - start_time < MAX_TIME:
 
-			cur_node = heappop(queue)
-			# cur_node = queue.pop(0)
+			# cur_node = heappop(queue)
+			cur_node = queue.pop(0)
 			
 			if cur_node in SearchEngine.close_nodes:
 				print("HERE")
@@ -180,17 +186,17 @@ class SearchEngine:
 			# so we go to the best options first
 			next_states.sort()
 			
-			next_states = next_states[:3]
+			next_states = next_states[:2]
 			
 			for next_node in next_states:
 				next_node_dist = distance[next_node] if next_node in distance else float('inf')
 				if distance[cur_node] + 1 < next_node_dist:
 					distance[next_node] = distance[cur_node] + 1
 					# next_node.moves += 0.2 * cur_node.moves
-					next_node.moves += 0.2 * distance[next_node]
+					# next_node.moves += 0.5 * distance[next_node]
 					next_node.set_parent(cur_node) # for retracing the path of moves performed
-					heappush(queue, next_node)
-					# queue.append(next_node)
+					# heappush(queue, next_node)
+					queue.append(next_node)
 		print("Unable to solve cube in {} seconds :(".format(MAX_TIME))
 		# maybe add some printing here to see what the starting state was / throw an error
 		
