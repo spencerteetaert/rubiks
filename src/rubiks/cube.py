@@ -11,6 +11,10 @@ possible_rotations_inverse = {'L':'L\'','R':'R\'','B':'B\'','F':'F\'','U':'U\'',
         'L2':'L2','R2':'R2','B2':'B2','F2':'F2','U2':'U2','D2':'D2'}
 
 class Cube:
+    ignore = [i for i in range(6)] * 3
+    ignore.sort()
+    state_solved = np.array([ignore, ignore, ignore], dtype=int)
+
     def __init__(self, state=None, optimal_path='', data_generation=False):
         '''
         state:  3 x 18 numpy array representing the cube state
@@ -23,9 +27,8 @@ class Cube:
         optimal_path: string or list of N moves that lead to an optimal solve 
         '''
         if not data_generation:
-            self.initialize_solved()
             if state is None:
-                self.state = copy.copy(self.state_solved)
+                self.state = Cube.state_solved
             else:
                 self.state = copy.copy(state)
             self.move_index = 0
@@ -34,30 +37,35 @@ class Cube:
             elif type(optimal_path) == type([]):
                 self.optimal_path = optimal_path
         else:
-            self.state = copy.copy(state)
+            if state is None:
+                pass
+            else:
+                self.state = copy.copy(state)
     def __repr__(self):
         display_console(self, letter=1)
         return ''
+    def __eq__(self, other):
+        return np.all(self.state == other.state)
     
     def solved(self):
         '''
             Returns True if cube.state is solved
             Returns False else
         '''
-        return np.all(self.state == self.state_solved)
+        return np.all(self.state == Cube.state_solved)
     def scramble(self, num_moves=20):
         '''
             Performs num_moves random rotations starting from solved. 
             Saves optimal path
         '''
-        self.state = copy.copy(self.state_solved)
+        self.state = copy.copy(Cube.state_solved)
         self.optimal_path = []
         self.move_index = 0
-        last_rotation = ''
+        last_rotation = ' '
         for i in range(0, num_moves):
             while True:
                 rot = np.random.choice(possible_rotations)
-                if last_rotation != possible_rotations_inverse[rot]:
+                if last_rotation[0] != rot[0]:
                     break
             last_rotation = rot
             self.rotate(rot)
@@ -150,11 +158,6 @@ class Cube:
         self.state = new_state
     def get_state(self):
         return self.state
-
-    def initialize_solved(self):
-        temp = [i for i in range(6)] * 3
-        temp.sort()
-        self.state_solved = np.array([temp, temp, temp], dtype=int)
 
     def swap_inplace(self, indeces, clockwise=True, number=1):
         for i in range(number):

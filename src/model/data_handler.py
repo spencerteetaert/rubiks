@@ -113,12 +113,13 @@ def generate_dataset(num_data):
     '''
     s = time.time()
     lower_n = 5  # to be set later
-    every_n = num_data // (21 - lower_n)
+    upper_n = 21
+    every_n = num_data // (upper_n - lower_n)
     data = []
     labels = []
-    for i in range(lower_n, 21):
+    for i in range(lower_n, upper_n):
         for j in range(every_n):
-            random_cube = Cube()
+            random_cube = Cube(data_generation=True)
             random_cube.scramble(num_moves=i)
             labels.append(i)
             data.append(random_cube.get_state())
