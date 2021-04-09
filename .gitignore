@@ -4,7 +4,6 @@ spencer_dev.py
 ignore/
 models/
 TEST_SET2
-.idea/
 
 /tools/pro.py
 
