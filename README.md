@@ -7,6 +7,18 @@ Project for APS360. A software package that facilitates all aspects of a Rubik's
 and your code successfully runs all other tests. 
 ---
 
+## misc
+* EXAMPLEMODEL - pickled RubiksModel object that we have pretrained for example purposes 
+* close_nodes - pickled dictionary of cube states that are within 4 moves of optimal solve
+* test_set - pickled 2d list containing 20 sets of 5 cubes scrambled 1 - 20 times (sorted)
+* training0.txt - dataset by Anton Bobrov;
+THE BEER-WARE LICENSE (Revision 42):
+antbob@users.noreply.github.com created this. As long as you retain
+this notice you can do whatever you want with this stuff. If we meet
+someday, and you think this stuff is worth it, you can buy me a beer in
+return Anton Bobrov
+---
+
 ## src
 ### src/model
 * data_handler.py - functions for generating, loading, and parsing datasets 
@@ -14,7 +26,7 @@ and your code successfully runs all other tests.
 * search.py - contains search and node classes, both used when performing search. Can be easily edited to perform baseline searches without an ML model. 
 * train.py - functions for training, evaluating, and documenting an ML model
 ### src/Rubiks 
-* cube.py - class for a Rubiks Cube object. Stores state, performs rotations, scrambles, and checks for solve 
+* cube.py - class for a Rubiks Cube object. Stores state, performs rotations, scrambles, and checks for solved state
 ### src/UI
 * display_tools.py - functions for displaying the Cube states in a user-friendly form
 
@@ -22,21 +34,11 @@ and your code successfully runs all other tests.
 ---
 
 ## tools 
-* example.py - 
+* benchmark.py - a function that generates a benchmark set from an existing dataset
 * profiler.py - runs a timing analysis on the full search pipeline 
+* run_tests.py - runs all unit tests
 * test_search.py - tests a model's search against a given test/validation set
-* training0.txt - dataset by Anton Bobrov 
-
-THE BEER-WARE LICENSE (Revision 42):
-antbob@users.noreply.github.com created this. As long as you retain
-this notice you can do whatever you want with this stuff. If we meet
-someday, and you think this stuff is worth it, you can buy me a beer in
-return Anton Bobrov
-
 * training_code.ipynb - notebook for running hyperparameter search, result representation, and general training
 ---
 
-* close_nodes - pickled dictionary of cube states that are within 4 moves of optimal solve 
 * requirements.txt - project requirements 
-* run_tests.py - runs all unit tests
-* test_set - pickled 2d list containing 20 sets of 5 cuubescubes scrambled 1 - 20 times (sorted)
