@@ -1,9 +1,5 @@
 from context import src # This allows for aunt/uncle imports 
-
-import numpy as np
-from src.model.model import RubiksModel
 from src.rubiks.cube import Cube
-from src.ui.display_tools import display_console
 from src.model.data_handler import parse_training
 
 def benchmark_data(file, stateOrCube, n=30):
@@ -19,4 +15,4 @@ def benchmark_data(file, stateOrCube, n=30):
 
     return y
 
-benchmark_data("training0.txt", 1)
+benchmark_data("misc/training0.txt", 1)

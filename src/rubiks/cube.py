@@ -3,7 +3,7 @@ File for cube class
 '''
 import copy
 import numpy as np
-from ..ui.display_tools import display_console
+from .display_tools import display_console
 
 possible_rotations = ['L','R','B','F','U','D','L\'','R\'','B\'','F\'','U\'','D\'','L2','R2','B2','F2','U2','D2']
 possible_rotations_inverse = {'L':'L\'','R':'R\'','B':'B\'','F':'F\'','U':'U\'','D':'D\'', \
