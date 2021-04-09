@@ -77,7 +77,7 @@ class Node:
 				rotations.append(rotation)
 		moves = self.model(torch.tensor(states).long())
 		for i in range(len(cubes)):
-			neighbours.append( Node(cubes[i], self.model, moves=moves[i] transition_turn=rotations[i]))#, moves=moves[i]) )
+			neighbours.append( Node(cubes[i], self.model, moves=moves[i], transition_turn=rotations[i]))#, moves=moves[i]) )
 		return neighbours
 
 	def find_transition_turn(self, other_node):
@@ -93,7 +93,7 @@ BEST_FIRST = "BEST_FIRST"
 
 class SearchEngine:
 	
-	close_nodes = torch.load("close_nodes")
+	close_nodes = torch.load("misc/close_nodes")
 	
 	def __init__(self, model):
 		

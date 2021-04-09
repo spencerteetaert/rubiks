@@ -1,3 +1,4 @@
+from context import __tests__
 from __tests__ import *
 
 '''
