@@ -27,7 +27,6 @@ return Anton Bobrov
 * train.py - functions for training, evaluating, and documenting an ML model
 ### src/Rubiks 
 * cube.py - class for a Rubiks Cube object. Stores state, performs rotations, scrambles, and checks for solved state
-### src/UI
 * display_tools.py - functions for displaying the Cube states in a user-friendly form
 
 <img src="https://user-images.githubusercontent.com/45899408/114197049-f9dd5500-991f-11eb-9f08-7cce96249eae.PNG" height="200" /><img src="https://user-images.githubusercontent.com/45899408/114197052-fa75eb80-991f-11eb-9c37-34bf4353a708.PNG" height="200" />
