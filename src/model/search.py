@@ -1,5 +1,6 @@
 import copy
 import torch
+import numpy as np
 from ..rubiks.cube import Cube
 from .model import RubiksModel
 import time
@@ -14,7 +15,7 @@ class Node:
 	total_nodes = 0
 	rotations = ["L", "R", "U", "D", "B", "F", "L'", "R'", "U'", "D'", "B'", "F'", "L2", "R2", "U2", "D2", "B2", "F2"]
 	
-	def __init__(self, cube, model, moves=-1, transition_turn=""):
+	def __init__(self, cube, model, moves=-1, transition_turn=" "):
 		"""
 		
 		cube: a Cube object defined in cube.py (Holds numpy state that is useful to our model)
@@ -25,7 +26,9 @@ class Node:
 			
 		"""
 		if moves == -1:
-			self.moves = model([cube.state])[0][0]#.item() # the number of moves until the cube is solved
+			# self.moves = torch.tensor(np.sum(Cube.state_solved != cube.state)/12) # USE THIS FOR A* BASELINE WITH HEURISTIC
+			# self.moves = torch.tensor([0]) # USE THIS FOR BFS
+			self.moves = model([cube.state])[0][0] # USE THIS FOR A* WITH MODEL HEURISTIC
 		else:
 			self.moves = moves
 		self.model = model
@@ -63,15 +66,18 @@ class Node:
 		neighbours = []
 		cubes = []
 		states = []
+		rotations = []
 		# old_state = copy.copy(self.cube.state)
-		for rotation in Node.rotations:
-			cube_copy = Cube(self.cube.state)
-			cube_copy.rotate(rotation)
-			cubes.append(cube_copy)
-			states.append(cube_copy.state)
+		for rotation in Node.rotations: ### CHANGE THIS TO CHECK FOR ROTATIONS 
+			if rotation[0] != self.transition_turn[0]:
+				cube_copy = Cube(self.cube.state)
+				cube_copy.rotate(rotation)
+				cubes.append(cube_copy)
+				states.append(cube_copy.state)
+				rotations.append(rotation)
 		moves = self.model(torch.tensor(states).long())
-		for i in range(18):
-			neighbours.append( Node(cubes[i], self.model, moves[i], Node.rotations[i]) )
+		for i in range(len(cubes)):
+			neighbours.append( Node(cubes[i], self.model, moves=moves[i] transition_turn=rotations[i]))#, moves=moves[i]) )
 		return neighbours
 
 	def find_transition_turn(self, other_node):
